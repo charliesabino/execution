@@ -1,0 +1,26 @@
+#include <algorithm>
+#include <tuple>
+#include <utility>
+namespace toy {
+template <typename... Ts> class just_sender {
+public:
+  template <typename Receiver> class op_state {
+    Receiver receiver_;
+    std::tuple<Ts...> vals_;
+
+  public:
+    auto start() -> void {
+      std::apply([this](Ts &...xs) { receiver_.set_value(std::move(xs)...); },
+                 vals_);
+    }
+  };
+
+  template <typename Receiver>
+  auto connect(Receiver receiver) -> op_state<Receiver> {
+    return op_state{receiver, std::move(vals_)};
+  }
+
+private:
+  std::tuple<Ts...> vals_;
+};
+} // namespace toy
