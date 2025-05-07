@@ -2,6 +2,7 @@
 #include <tuple>
 #include <type_traits>
 #include <utility>
+
 namespace toy {
 template <typename... Ts> class just_sender {
 public:
@@ -23,7 +24,7 @@ public:
 
   template <typename Receiver>
   auto connect(Receiver receiver) -> op_state<Receiver> {
-    return op_state{receiver, std::move(vals_)};
+    return op_state{std::move(receiver), std::move(vals_)};
   }
 
 private:
@@ -31,7 +32,7 @@ private:
 };
 
 template <typename... Ts> auto just(Ts &&...args) {
-  return just_sender<std::decay_t<Ts>...>{std::forward(args)...};
+  return just_sender<std::decay_t<Ts>...>{std::forward<Ts>(args)...};
 }
 
 } // namespace toy
