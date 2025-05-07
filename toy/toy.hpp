@@ -68,7 +68,7 @@ private:
 
 template <typename Sender, typename Function>
 auto then(Sender sender, Function function) -> then_sender<Sender, Function> {
-  return then_sender{sender, function};
+  return then_sender{std::move(sender), std::move(function)};
 }
 
 } // namespace toy
