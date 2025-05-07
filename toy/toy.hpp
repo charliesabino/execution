@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 namespace toy {
 template <typename... Ts> class just_sender {
@@ -30,7 +31,7 @@ private:
 };
 
 template <typename... Ts> auto just(Ts &&...args) {
-  return just_sender{std::forward(args)...};
+  return just_sender<std::decay_t<Ts>...>{std::forward(args)...};
 }
 
 } // namespace toy
