@@ -28,4 +28,9 @@ public:
 private:
   std::tuple<Ts...> vals_;
 };
+
+template <typename... Ts> auto just(Ts &&...args) {
+  return just_sender{std::forward(args)...};
+}
+
 } // namespace toy
