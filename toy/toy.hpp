@@ -49,4 +49,21 @@ private:
   Receiver out_receiver_;
   Function function_;
 };
+
+template <typename Sender, typename Function> class then_sender {
+public:
+  then_sender(Sender inner_sender, Function function)
+      : inner_sender_{std::move(inner_sender)}, function_{std::move(function)} {
+  }
+
+  template <typename Receiver> auto connect(Receiver receiver) {
+    auto wrapped = then_receiver{std::move(receiver), function_};
+    return inner_sender_.connect(std::move(wrapped));
+  }
+
+private:
+  Sender inner_sender_;
+  Function function_;
+};
+
 } // namespace toy
