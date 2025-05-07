@@ -21,4 +21,9 @@ int main() {
   toy::then(sender2, [](int x, int y, int z) { return x + y + z; })
       .connect(PrintReceiver{})
       .start();
+
+  toy::then(toy::then(sender2, [](int x, int y, int z) { return x + y + z; }),
+            [](int x) { return x / 2; })
+      .connect(PrintReceiver{})
+      .start();
 }
