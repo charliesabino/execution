@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/charliesabino/School/adv_cpp/execution/build",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/charliesabino/School/adv_cpp/execution/include -std=gnu++2b -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -o CMakeFiles/MyApp.dir/main.cpp.o -c /Users/charliesabino/School/adv_cpp/execution/main.cpp",
+  "file": "/Users/charliesabino/School/adv_cpp/execution/main.cpp",
+  "output": "CMakeFiles/MyApp.dir/main.cpp.o"
+}
+]
