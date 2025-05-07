@@ -18,6 +18,8 @@ public:
     }
   };
 
+  explicit just_sender(Ts... xs) : vals_(std::move(xs)...) {}
+
   template <typename Receiver>
   auto connect(Receiver receiver) -> op_state<Receiver> {
     return op_state{receiver, std::move(vals_)};
