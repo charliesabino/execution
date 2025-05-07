@@ -7,8 +7,7 @@
 
 struct PrintReceiver {
 
-  template<typename ...Ts>
-  auto set_value(Ts... args) -> void {
+  template <typename... Ts> auto set_value(Ts... args) -> void {
     ((std::cout << args << std::endl), ...);
   }
 };
@@ -16,6 +15,10 @@ struct PrintReceiver {
 int main() {
 
   auto sender = toy::just(5, 7, "test");
-  auto op_state = sender.connect(PrintReceiver{});
-  op_state.start();
+  sender.connect(PrintReceiver{}).start();
+
+  auto sender2 = toy::just(6, 8, 10);
+  toy::then(sender2, [](int x, int y, int z) { return x + y + z; })
+      .connect(PrintReceiver{})
+      .start();
 }
