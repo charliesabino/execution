@@ -9,6 +9,9 @@ public:
     std::tuple<Ts...> vals_;
 
   public:
+    op_state(Receiver receiver, std::tuple<Ts...> vals)
+        : receiver_{std::move(receiver)}, vals_{std::move(vals)} {}
+
     auto start() -> void {
       std::apply([this](Ts &...xs) { receiver_.set_value(std::move(xs)...); },
                  vals_);
