@@ -25,4 +25,10 @@ int main() {
 
   auto sender3 = toy::just(70) | toy::then([](auto x) { return x * 2; });
   sender3.connect(PrintReceiver{}).start();
+
+  auto sched = toy::inline_scheduler{};
+  auto pipe = sched.schedule() | toy::then([]() { return 1; }) |
+              toy::then([](auto x) { return x * 4; }) |
+              toy::then([](auto y) { return y - 2; });
+  pipe.connect(PrintReceiver{}).start();
 }
