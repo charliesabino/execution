@@ -75,7 +75,8 @@ template <typename Function> class then_closure {
 public:
   then_closure(Function function) : function_{std::move(function)} {}
 
-  template <typename Sender> auto operator()(Sender &&sender) {
+  template <typename Sender>
+  auto operator()(Sender &&sender) -> then_sender<Sender, Function> {
     return then(std::forward<Sender>(sender), function_);
   }
 
