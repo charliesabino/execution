@@ -21,6 +21,7 @@ public:
     }
   };
 
+public:
   explicit just_sender(Ts... xs) : vals_(std::move(xs)...) {}
 
   template <typename Receiver>
