@@ -71,4 +71,26 @@ auto then(Sender sender, Function function) -> then_sender<Sender, Function> {
   return then_sender{std::move(sender), std::move(function)};
 }
 
+template <typename Function> class then_closure {
+public:
+  then_closure(Function function) : function_{std::move(function)} {}
+
+  template <typename Sender> auto operator()(Sender &&sender) {
+    return then(std::forward<Sender>(sender), function_);
+  }
+
+private:
+  Function function_;
+};
+
+template <typename Function> auto then(Function function) {
+  return then_closure{std::move(function)};
+}
+
+template <typename Sender, typename Closure>
+auto operator|(Sender &&sender, Closure &&closure) // we rely on ADL here!
+    -> decltype(closure(std::forward<Sender>(sender))) {
+  return closure(std::forward<Sender>(sender));
+}
+
 } // namespace toy
