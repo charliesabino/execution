@@ -109,7 +109,7 @@ private:
 
   public:
     template <typename Receiver>
-    auto connect(Receiver receiver) -> op_state<Receiver> {
+    auto connect(Receiver receiver) const -> op_state<std::decay_t<Receiver>> {
       return op_state{std::move(receiver)};
     };
   };
