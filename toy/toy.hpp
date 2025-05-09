@@ -6,7 +6,6 @@
 
 namespace toy {
 template <typename... Ts> class just_sender {
-public:
   template <typename Receiver> class op_state {
     Receiver receiver_;
     std::tuple<Ts...> vals_;
@@ -94,5 +93,29 @@ auto operator|(Sender &&sender, Closure &&closure) // we rely on ADL here!
     -> decltype(closure(std::forward<Sender>(sender))) {
   return closure(std::forward<Sender>(sender));
 }
+
+class inline_scheduler {
+private:
+  class schedule_sender {
+  private:
+    template <typename Receiver> class op_state {
+    private:
+      Receiver receiver_;
+
+    public:
+      explicit op_state(Receiver receiver) : receiver_{std::move(receiver)} {}
+      auto start() noexcept -> void { receiver_.set_value(); }
+    };
+
+  public:
+    template <typename Receiver>
+    auto connect(Receiver receiver) -> op_state<Receiver> {
+      return op_state{std::move(receiver)};
+    };
+  };
+
+public:
+  auto schedule() const -> schedule_sender { return schedule_sender{}; };
+};
 
 } // namespace toy
