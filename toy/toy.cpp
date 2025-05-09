@@ -1,9 +1,5 @@
 #include "toy.hpp"
-#include <algorithm>
 #include <iostream>
-#include <tuple>
-#include <type_traits>
-#include <utility>
 
 struct PrintReceiver {
 
@@ -26,4 +22,7 @@ int main() {
             [](int x) { return x / 2; })
       .connect(PrintReceiver{})
       .start();
+
+  auto sender3 = toy::just(70) | toy::then([](auto x) { return x * 2; });
+  sender3.connect(PrintReceiver{}).start();
 }
