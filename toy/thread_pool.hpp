@@ -1,13 +1,14 @@
 #include <condition_variable>
-#include <cstdint>
 #include <functional>
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <utility>
 #include <vector>
 namespace toy {
 
 class thread_pool {
+private:
   std::mutex mtx_;
   std::condition_variable cv_;
   std::queue<std::function<void()>> tasks_;
@@ -58,5 +59,14 @@ public:
     cv_.notify_one();
   };
 
+public:
+  class scheduler {
+  private:
+    thread_pool *pool_;
+
+  public:
+    scheduler(thread_pool *pool) : pool_{pool} {}
+  };
+  auto get_scheduler() -> scheduler { return scheduler{this}; }
 };
 }; // namespace toy
