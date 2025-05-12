@@ -19,8 +19,7 @@ private:
     std::function<void()> task{};
     {
       std::unique_lock guard(mtx_);
-      cv_.wait(guard,
-               [this]() { return this->done_ || !this->tasks_.empty(); });
+      cv_.wait(guard, [this]() { return done_ || !tasks_.empty(); });
       if (done_ || tasks_.empty()) {
         return;
       }
