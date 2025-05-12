@@ -42,11 +42,21 @@ public:
   // expire before the thread exits. However, the code ensures that this pointer
   // is never accessed.
   ~thread_pool() {
-    std::unique_lock guard(mtx_);
-    done_ = false;
+    {
+      std::lock_guard guard(mtx_);
+      done_ = true;
+    }
+    cv_.notify_all();
     for (auto &worker : workers_) {
       worker.join();
     }
   }
+
+  auto post(std::function<void()> task) -> void {
+    std::lock_guard guard(mtx_);
+    tasks_.emplace(std::move(task));
+    cv_.notify_one();
+  };
+
 };
 }; // namespace toy
