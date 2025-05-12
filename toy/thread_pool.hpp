@@ -30,7 +30,7 @@ private:
   }
 
 public:
-  thread_pool(auto num_workers = std::thread::hardware_concurrency()) {
+  explicit thread_pool(auto num_workers = std::thread::hardware_concurrency()) {
     while (num_workers--) {
       workers_.emplace_back([this]() { run(); });
     }
@@ -64,7 +64,7 @@ public:
     thread_pool *pool_;
 
   public:
-    scheduler(thread_pool *pool) : pool_{pool} {}
+    explicit scheduler(thread_pool &pool) : pool_{pool} {}
   };
   auto get_scheduler() -> scheduler { return scheduler{this}; }
 };
