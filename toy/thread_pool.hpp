@@ -61,11 +61,18 @@ public:
 public:
   class scheduler {
   private:
-    thread_pool *pool_;
+    thread_pool &pool_;
 
   public:
     explicit scheduler(thread_pool &pool) : pool_{pool} {}
   };
-  auto get_scheduler() -> scheduler { return scheduler{this}; }
+
+  // "deducing this" wasn't not convered in class, but I follow Barry/have seen
+  // it in conference talks and wanted to practice using it. Doing so eliminates
+  // the unecessary space overhead of more pointer copies (although the compiler
+  // might optimize them away anyways).
+  auto get_scheduler(this thread_pool &self) -> scheduler {
+    return scheduler{self};
+  }
 };
 }; // namespace toy
