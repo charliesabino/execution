@@ -90,8 +90,9 @@ template <typename Function> auto then(Function function) {
   return then_closure{std::move(function)};
 }
 
+// we rely on ADL here!
 template <typename Sender, typename Closure>
-auto operator|(Sender &&sender, Closure &&closure) // we rely on ADL here!
+auto operator|(Sender &&sender, Closure &&closure)
     -> decltype(closure(std::forward<Sender>(sender))) {
   return closure(std::forward<Sender>(sender));
 }
