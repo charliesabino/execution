@@ -65,12 +65,41 @@ public:
 
   public:
     explicit scheduler(thread_pool &pool) : pool_{pool} {}
+
+    class schedule_sender {
+      thread_pool &pool_;
+
+    public:
+      friend scheduler;
+      explicit schedule_sender(thread_pool &p) : pool_{p} {}
+
+      template <class Receiver> class op_state {
+        thread_pool &pool_;
+        Receiver recv_;
+
+      public:
+        op_state(thread_pool &p, Receiver r) : pool_{p}, recv_{std::move(r)} {}
+
+        auto start() noexcept -> void {
+          pool_.post([r = std::move(recv_)]() mutable { r.set_value(); });
+        }
+      };
+
+      template <class Receiver> auto connect(Receiver r) const {
+        return op_state<Receiver>{pool_, std::move(r)};
+      };
+    };
+
+    auto schedule() const noexcept -> schedule_sender {
+      return schedule_sender{pool_};
+    }
   };
 
-  // "deducing this" wasn't not convered in class, but I follow Barry/have seen
+  // "deducing this" wasn't not convered in class, but I have seen
   // it in conference talks and wanted to practice using it. Doing so eliminates
   // the unecessary space overhead of more pointer copies (although the compiler
-  // might optimize them away anyways).
+  // might optimize them away anyways). Generally, I felt that sticking to
+  // references over pointers was a good idea.
   auto get_scheduler(this thread_pool &self) -> scheduler {
     return scheduler{self};
   }
