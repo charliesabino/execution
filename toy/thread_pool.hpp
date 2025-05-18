@@ -17,17 +17,19 @@ private:
   bool done_ = false;
 
   auto run() -> void {
-    std::function<void()> task{};
-    {
-      std::unique_lock guard(mtx_);
-      cv_.wait(guard, [this]() { return done_ || !tasks_.empty(); });
-      if (done_ || tasks_.empty()) {
-        return;
+    for (;;) {
+      std::function<void()> task{};
+      {
+        std::unique_lock guard(mtx_);
+        cv_.wait(guard, [this]() { return done_ || !tasks_.empty(); });
+        if (done_ || tasks_.empty()) {
+          return;
+        }
+        task = tasks_.front();
+        tasks_.pop();
       }
-      task = tasks_.front();
-      tasks_.pop();
+      task();
     }
-    task();
   }
 
 public:
