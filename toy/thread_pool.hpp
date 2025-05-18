@@ -1,12 +1,14 @@
+#pragma once
+
 #include <condition_variable>
 #include <functional>
+#include <iostream>
 #include <mutex>
 #include <queue>
 #include <thread>
 #include <utility>
 #include <vector>
 namespace toy {
-
 class thread_pool {
 private:
   std::mutex mtx_;
@@ -26,7 +28,9 @@ private:
       auto task = tasks_.front();
       tasks_.pop();
     }
+    std::cout << "Running task\n";
     task();
+    std::cout << "Task ran\n";
   }
 
 public:
@@ -53,8 +57,11 @@ public:
   }
 
   auto post(std::function<void()> task) -> void {
-    std::lock_guard guard(mtx_);
-    tasks_.emplace(std::move(task));
+    std::cout << "Added job to queue\n";
+    {
+      std::lock_guard guard(mtx_);
+      tasks_.emplace(std::move(task));
+    }
     cv_.notify_one();
   };
 
@@ -78,7 +85,8 @@ public:
         Receiver recv_;
 
       public:
-        op_state(thread_pool &p, Receiver r) : pool_{p}, recv_{std::move(r)} {}
+        op_state(thread_pool &pool, Receiver recv)
+            : pool_{pool}, recv_{std::move(recv)} {}
 
         auto start() noexcept -> void {
           pool_.post([r = std::move(recv_)]() mutable { r.set_value(); });
@@ -101,6 +109,7 @@ public:
   // might optimize them away anyways). Generally, I felt that sticking to
   // references over pointers was a good idea.
   auto get_scheduler(this thread_pool &self) -> scheduler {
+    std::cout << "get()\n";
     return scheduler{self};
   }
 };
