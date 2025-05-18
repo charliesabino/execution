@@ -28,9 +28,7 @@ private:
       task = tasks_.front();
       tasks_.pop();
     }
-    std::cout << "Running task\n";
     task();
-    std::cout << "Task ran\n";
   }
 
 public:
@@ -57,7 +55,6 @@ public:
   }
 
   auto post(std::function<void()> task) -> void {
-    std::cout << "Added job to queue\n";
     {
       std::lock_guard guard(mtx_);
       tasks_.emplace(std::move(task));
@@ -109,7 +106,6 @@ public:
   // might optimize them away anyways). Generally, I felt that sticking to
   // references over pointers was a good idea.
   auto get_scheduler(this thread_pool &self) -> scheduler {
-    std::cout << "get()\n";
     return scheduler{self};
   }
 };
