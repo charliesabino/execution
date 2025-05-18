@@ -25,7 +25,7 @@ private:
       if (done_ || tasks_.empty()) {
         return;
       }
-      auto task = tasks_.front();
+      task = tasks_.front();
       tasks_.pop();
     }
     std::cout << "Running task\n";
