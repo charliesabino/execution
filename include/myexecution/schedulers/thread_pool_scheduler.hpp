@@ -24,7 +24,6 @@ private:
 public:
   explicit thread_pool(
       std::integral auto num_workers = std::thread::hardware_concurrency()) {
-
     while (num_workers--) {
       workers_.emplace_back([this]() { run(); });
     }
