@@ -42,9 +42,9 @@ public:
 
   // Notably, this enables currently running tasks to continue running, even
   // after the thread pool exits scope. This may raise the concern of dangling
-  // pointers—the worker threads contain a pointer to the thread pool, which may
-  // expire before the thread exits. However, the code ensures that this pointer
-  // is never accessed.
+  // references—the worker threads contain a reference to the thread pool, which
+  // may expire before the thread exits. However, the code ensures that this
+  // reference is never accessed. Thus, we maintain our invariant.
   ~thread_pool() {
     {
       std::lock_guard guard(mtx_);
