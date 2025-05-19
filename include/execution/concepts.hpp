@@ -12,4 +12,9 @@ concept receiver = requires(Recv &&r) {
   { std::forward<Recv>(r).set_stopped() } noexcept;
 };
 
+template <typename OpState>
+concept operation_state = requires(OpState op) {
+  { op.start() } noexcept;
+};
+
 } // namespace execution
