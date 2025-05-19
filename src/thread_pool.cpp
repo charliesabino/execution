@@ -18,12 +18,6 @@ auto thread_pool::run() -> void {
   }
 }
 
-thread_pool::thread_pool(auto num_workers) {
-  while (num_workers--) {
-    workers_.emplace_back([this]() { run(); });
-  }
-}
-
 // Notably, this enables currently running tasks to continue running, even
 // after the thread pool exits scope. This may raise the concern of dangling
 // references—the worker threads contain a reference to the thread pool, which
