@@ -17,9 +17,4 @@ concept operation_state = requires(OpState op) {
   { op.start() } noexcept;
 };
 
-template <typename Sender, typename Recv>
-concept sender = receiver<Recv> && requires(Sender s, Recv r) {
-  { connect(std::move(s), std::move(r)) } -> operation_state;
-};
-
 } // namespace execution
