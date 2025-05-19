@@ -1,11 +1,12 @@
 #pragma once
 
+#include "myexecution/concepts.hpp"
 #include <algorithm>
 #include <functional>
 #include <utility>
 
 namespace execution {
-template <typename Receiver, typename Function> class then_receiver {
+template <execution::receiver Receiver, typename Function> class then_receiver {
 public:
   then_receiver(Receiver receiver, Function function)
       : out_receiver_{std::move(receiver)}, function_{std::move(function)} {}
@@ -13,6 +14,12 @@ public:
   template <typename... Ts> auto set_value(Ts &&...args) -> void {
     out_receiver_.set_value(std::invoke(function_, std::forward<Ts>(args)...));
   }
+
+  void set_error(std::exception_ptr ep) noexcept {
+    out_receiver_.set_error(std::move(ep));
+  }
+
+  void set_stopped() noexcept { out_receiver_.set_stopped(); }
 
 private:
   Receiver out_receiver_;
@@ -25,7 +32,7 @@ public:
       : inner_sender_{std::move(inner_sender)}, function_{std::move(function)} {
   }
 
-  template <typename Receiver> auto connect(Receiver receiver) {
+  template <execution::receiver Receiver> auto connect(Receiver receiver) {
     auto wrapped = then_receiver{std::move(receiver), function_};
     return inner_sender_.connect(std::move(wrapped));
   }

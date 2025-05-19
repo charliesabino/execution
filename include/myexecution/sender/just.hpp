@@ -1,5 +1,6 @@
 #pragma once
 
+#include "myexecution/concepts.hpp"
 #include <algorithm>
 #include <tuple>
 #include <type_traits>
@@ -8,7 +9,7 @@
 namespace execution {
 
 template <typename... Ts> class just_sender {
-  template <typename Receiver> class op_state {
+  template <execution::receiver Receiver> class op_state {
     Receiver receiver_;
     std::tuple<Ts...> vals_;
 
@@ -25,7 +26,7 @@ template <typename... Ts> class just_sender {
 public:
   explicit just_sender(Ts... xs) : vals_(std::move(xs)...) {}
 
-  template <typename Receiver>
+  template <execution::receiver Receiver>
   auto connect(Receiver receiver) -> op_state<Receiver> {
     return op_state{std::move(receiver), std::move(vals_)};
   }

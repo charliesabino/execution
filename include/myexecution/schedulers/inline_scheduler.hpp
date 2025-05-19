@@ -1,12 +1,13 @@
 #pragma once
 
+#include "myexecution/concepts.hpp"
 #include <utility>
 
 class inline_scheduler {
 private:
   class schedule_sender {
   private:
-    template <typename Receiver> class op_state {
+    template <execution::receiver Receiver> class op_state {
     private:
       Receiver receiver_;
 
@@ -16,7 +17,7 @@ private:
     };
 
   public:
-    template <typename Receiver>
+    template <execution::receiver Receiver>
     auto connect(Receiver receiver) const -> op_state<std::decay_t<Receiver>> {
       return op_state{std::move(receiver)};
     };

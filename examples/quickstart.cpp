@@ -9,7 +9,7 @@ struct print_receiver {
     ((std::cout << xs << ' '), ...);
     std::cout << '\n';
   }
-  // void set_error(std::exception_ptr) noexcept { std::terminate(); }
+  void set_error(std::exception_ptr) noexcept { std::terminate(); }
   void set_stopped() noexcept {}
 };
 
