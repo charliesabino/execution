@@ -1,7 +1,4 @@
-#include <execution/just.hpp>
-#include <execution/schedulers/inline_scheduler.hpp>
-#include <execution/schedulers/thread_pool_scheduler.hpp>
-#include <execution/then.hpp>
+#include <myexecution/myexecution.hpp>
 
 #include <iostream>
 #include <thread>
