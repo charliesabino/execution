@@ -6,6 +6,7 @@
 class inline_scheduler {
 private:
   class schedule_sender {
+  public:
     using sender_concept = execution::sender_t;
 
   private:

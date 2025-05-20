@@ -27,9 +27,8 @@ private:
 };
 
 template <execution::sender Sender, typename Function> class then_sender {
-  using sender_concept = execution::sender_t;
-
 public:
+  using sender_concept = execution::sender_t;
   then_sender(Sender inner_sender, Function function)
       : inner_sender_{std::move(inner_sender)}, function_{std::move(function)} {
   }

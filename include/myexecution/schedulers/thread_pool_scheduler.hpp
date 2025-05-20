@@ -74,11 +74,11 @@ public:
     explicit scheduler(thread_pool &pool) : pool_{pool} {}
 
     class schedule_sender {
-      using sender_concept = execution::sender_t;
-
       thread_pool *pool_;
 
     public:
+      using sender_concept = execution::sender_t;
+
       schedule_sender(schedule_sender const &) noexcept = default;
       schedule_sender &operator=(schedule_sender const &) noexcept = default;
       schedule_sender(schedule_sender &&) noexcept = default;
