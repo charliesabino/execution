@@ -32,5 +32,6 @@ int main() {
   pool_sender.connect(print_receiver{}).start();
 
   // give the pool a moment to finish before main exits
+  // sync wait gave me too much trouble to implement :(
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
