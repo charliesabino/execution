@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <exception>
 #include <utility>
 
@@ -16,5 +17,14 @@ template <typename OpState>
 concept operation_state = requires(OpState op) {
   { op.start() } noexcept;
 };
+
+struct sender_t {};
+
+template <typename S>
+concept sender = std::movable<std::remove_cvref_t<
+    S>>; // &&
+         // requires(const std::remove_cvref_t<S> &s) {
+         //   typename std::remove_cvref_t<S>::sender_concept;
+         // };
 
 } // namespace execution
