@@ -6,6 +6,8 @@
 class inline_scheduler {
 private:
   class schedule_sender {
+    using sender_concept = execution::sender_t;
+
   private:
     template <execution::receiver Receiver> class op_state {
     private:

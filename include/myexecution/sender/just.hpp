@@ -9,6 +9,8 @@
 namespace execution {
 
 template <typename... Ts> class just_sender {
+  using sender_concept = execution::sender_t;
+
   template <execution::receiver Receiver> class op_state {
     Receiver receiver_;
     std::tuple<Ts...> vals_;

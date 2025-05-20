@@ -26,7 +26,9 @@ private:
   Function function_;
 };
 
-template <typename Sender, typename Function> class then_sender {
+template <execution::sender Sender, typename Function> class then_sender {
+  using sender_concept = execution::sender_t;
+
 public:
   then_sender(Sender inner_sender, Function function)
       : inner_sender_{std::move(inner_sender)}, function_{std::move(function)} {
@@ -42,7 +44,7 @@ private:
   Function function_;
 };
 
-template <typename Sender, typename Function>
+template <execution::sender Sender, typename Function>
 auto then(Sender sender, Function function) -> then_sender<Sender, Function> {
   return then_sender{std::move(sender), std::move(function)};
 }
@@ -51,7 +53,7 @@ template <typename Function> class then_closure {
 public:
   then_closure(Function function) : function_{std::move(function)} {}
 
-  template <typename Sender>
+  template <execution::sender Sender>
   auto operator()(Sender &&sender) -> then_sender<Sender, Function> {
     return then(std::forward<Sender>(sender), function_);
   }
@@ -65,7 +67,7 @@ template <typename Function> auto then(Function function) {
 }
 
 // we rely on ADL here! (as covered in class)
-template <typename Sender, typename Closure>
+template <execution::sender Sender, typename Closure>
 auto operator|(Sender &&sender, Closure &&closure)
     -> decltype(closure(std::forward<Sender>(sender))) {
   return closure(std::forward<Sender>(sender));
