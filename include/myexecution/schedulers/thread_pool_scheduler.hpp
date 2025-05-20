@@ -1,5 +1,6 @@
 #pragma once
-
+#include "myexecution/concepts.hpp"
+#include <algorithm>
 #include <condition_variable>
 #include <functional>
 #include <mutex>
@@ -73,11 +74,18 @@ public:
     explicit scheduler(thread_pool &pool) : pool_{pool} {}
 
     class schedule_sender {
-      thread_pool &pool_;
+      using sender_concept = execution::sender_t;
+
+      thread_pool *pool_;
 
     public:
-      friend scheduler;
-      explicit schedule_sender(thread_pool &p) : pool_{p} {}
+      schedule_sender(schedule_sender const &) noexcept = default;
+      schedule_sender &operator=(schedule_sender const &) noexcept = default;
+      schedule_sender(schedule_sender &&) noexcept = default;
+      schedule_sender &operator=(schedule_sender &&) noexcept = default;
+
+      explicit schedule_sender(thread_pool &p) noexcept
+          : pool_{std::addressof(p)} {}
 
       template <class Receiver> class op_state {
         thread_pool &pool_;
@@ -87,14 +95,14 @@ public:
         op_state(thread_pool &pool, Receiver recv)
             : pool_{pool}, recv_{std::move(recv)} {}
 
-        auto start() noexcept -> void {
+        void start() noexcept {
           pool_.post([r = std::move(recv_)]() mutable { r.set_value(); });
         }
       };
 
       template <class Receiver> auto connect(Receiver r) const {
-        return op_state<Receiver>{pool_, std::move(r)};
-      };
+        return op_state<Receiver>{*pool_, std::move(r)};
+      }
     };
 
     auto schedule() const noexcept -> schedule_sender {
