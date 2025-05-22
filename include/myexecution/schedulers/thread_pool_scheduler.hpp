@@ -110,11 +110,11 @@ public:
     }
   };
 
-  // "deducing this" wasn't not convered in class, but I have seen
+  // "deducing this" wasn't not convered in class, but I follow Barry/have seen
   // it in conference talks and wanted to practice using it. Doing so eliminates
-  // the unecessary space overhead of more pointer copies (although the compiler
-  // might optimize them away anyways). Generally, I felt that sticking to
-  // references over pointers was a good idea.
+  // the unecessary space overhead of more pointer copies (although maybe the
+  // compiler will optimize them away anyways?). Generally, I felt that sticking
+  // to references over pointers was a good idea.
   auto get_scheduler(this thread_pool &self) -> scheduler {
     return scheduler{self};
   }
