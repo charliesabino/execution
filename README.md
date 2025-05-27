@@ -13,6 +13,18 @@ Written as the final project for Advanced C++ (Spring 2025) by Charlie Sabino.
 - `thread_pool`: multi-threaded scheduling with a thread pool
 - Pipe syntax (`|`) for chaining senders and operations
 
+## Modern C++ techniques demonstrated
+
+- C++20/23 **Concepts** (`receiver`, `sender`, `operation_state`) for compile‑time safety
+- **Type‑traits & metafunctions** (`std::movable`, `std::remove_cvref_t`, …)
+- **Variadic templates** and perfect‑forwarding for zero‑overhead generic code
+- **RAII** thread‑pool cleanup to guarantee worker join
+- Custom **thread‑pool scheduler** built with `std::mutex`, `std::condition_variable`
+- **Pipe syntax** powered by **ADL** and a custom `operator|`
+- C++23 **deducing‑this** to avoid extra indirections (although not discussed in class)
+- Header‑only, **macro‑free** implementation in the spirit of “Kill the pre‑processor”
+- CMake
+
 ## Requirements
 
 - C++23-compatible compiler (e.g., GCC 11+, Clang 14+, MSVC 2019+)
