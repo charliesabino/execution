@@ -6,7 +6,7 @@ Written as the final project for Advanced C++ (Spring 2025) by Charlie Sabino.
 
 ## Features
 
-- Header-only, minimal implementation of the Senders & Receivers proposal (P2300)
+- Header-only, minimal implementation of the Senders & Receivers proposal ([P2300](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2300r10.html#spec-execution.get_scheduler))
 - `just`: create a sender that immediately sends values
 - `then`: transform values from a sender with a callable
 - `inline_scheduler`: schedule tasks on the calling thread
