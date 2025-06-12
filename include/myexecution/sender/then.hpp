@@ -65,7 +65,6 @@ template <typename Function> auto then(Function function) {
   return then_closure{std::move(function)};
 }
 
-// we rely on ADL here! (as covered in class)
 template <execution::sender Sender, typename Closure>
 auto operator|(Sender &&sender, Closure &&closure)
     -> decltype(closure(std::forward<Sender>(sender))) {

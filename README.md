@@ -1,9 +1,5 @@
 # Minimal std::execution
 
-## Overview
-
-Written as the final project for Advanced C++ (Spring 2025) by Charlie Sabino.
-
 ## Features
 
 - Header-only, minimal implementation of the Senders & Receivers proposal ([P2300](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2300r10.html#spec-execution.get_scheduler))
